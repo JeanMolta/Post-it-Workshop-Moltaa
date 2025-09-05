@@ -17,22 +17,11 @@ function createNoteElement(text, colorClass) {
     noteDiv.appendChild(deleteButton);
     return noteDiv;
 }
-//guarda las notas en el local storage
-function saveNotes() {
-    const notes = [];
-    notesContainer.querySelectorAll('.note').forEach(noteEl => {
-        notes.push({
-            text: noteEl.textContent.slice(0, -1),
-            color: noteEl.classList.contains('note-yellow') ? 'note-yellow' : 
-                   noteEl.classList.contains('note-blue') ? 'note-blue' : 
-                   'note-pink'
-        });
-    });
-    localStorage.setItem('notes', JSON.stringify(notes));
-}
+
 //carga las notas guardadas en el local storage
 function loadNotes() {
     const storedNotes = localStorage.getItem('notes');
+    console.log(storedNotes);
     if (storedNotes) {
         const notes = JSON.parse(storedNotes);
         notes.forEach(noteData => {
