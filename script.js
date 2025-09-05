@@ -4,7 +4,7 @@ const notesContainer = document.getElementById('notes-container');
 const toggleThemeButton = document.getElementById('toggle-theme-button');
 const body = document.body;
 const colors = ['note-yellow','note-blue','note-pink'];
-
+//crea el elemento de la nota
 function createNoteElement(text, colorClass) {
     const noteDiv = document.createElement('div');
     noteDiv.classList.add('note', colorClass); 
@@ -17,10 +17,22 @@ function createNoteElement(text, colorClass) {
     noteDiv.appendChild(deleteButton);
     return noteDiv;
 }
-
+//guarda las notas en el local storage
+function saveNotes() {
+    const notes = [];
+    notesContainer.querySelectorAll('.note').forEach(noteEl => {
+        notes.push({
+            text: noteEl.textContent.slice(0, -1),
+            color: noteEl.classList.contains('note-yellow') ? 'note-yellow' : 
+                   noteEl.classList.contains('note-blue') ? 'note-blue' : 
+                   'note-pink'
+        });
+    });
+    localStorage.setItem('notes', JSON.stringify(notes));
+}
+//carga las notas guardadas en el local storage
 function loadNotes() {
-    const storedNotes = [];
-    console.log(storedNotes);
+    const storedNotes = localStorage.getItem('notes');
     if (storedNotes) {
         const notes = JSON.parse(storedNotes);
         notes.forEach(noteData => {
@@ -30,6 +42,7 @@ function loadNotes() {
     }
 }
 
+//pone el modo inicial, el claro
 function setInitialTheme() {
     const isDarkMode = localStorage.getItem('isDarkMode') === 'true';
     if (isDarkMode) {
@@ -41,7 +54,7 @@ function setInitialTheme() {
 noteInput.addEventListener('input', () => {
     addButton.disabled = noteInput.value.trim() === '';
 });
-
+//activa el boton de modos al dar click
 toggleThemeButton.addEventListener('click', () => {
     body.classList.toggle('dark-mode');
     const isDarkMode = body.classList.contains('dark-mode');
@@ -82,7 +95,7 @@ notesContainer.addEventListener('dblclick', (event) => {
         });
     }
 });
-
+//al dar click crea una nota
 addButton.addEventListener('click', () => {
     const noteText = noteInput.value.trim();
     if (noteText !== '') {
@@ -94,20 +107,20 @@ addButton.addEventListener('click', () => {
         saveNotes();
     }
 });
-
+// al darle click al boton de borrar, se borra
 notesContainer.addEventListener('click', (event) => {
     if (event.target.classList.contains('delete-btn')) {
         event.target.parentElement.remove();
         saveNotes();
     }
 });
-
+//cuando se pasa el mouse por una nota le sale una sombrita
 notesContainer.addEventListener('mouseover', (event) => {
     if (event.target.classList.contains('note')) {
         event.target.style.boxShadow = '0 0 15px rgba(0,0,0,0.3)';
     }
 });
-
+//al quitar el mouse de encima de la nota se le quita la sombra
 notesContainer.addEventListener('mouseout', (event) => {
     if (event.target.classList.contains('note')) {
         event.target.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
