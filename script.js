@@ -3,7 +3,7 @@ const addButton = document.getElementById('add-note-button');
 const notesContainer = document.getElementById('notes-container');
 const toggleThemeButton = document.getElementById('toggle-theme-button');
 const body = document.body;
-const colors = ['note-yellow'];
+const colors = ['note-yellow','note-blue','note-pink'];
 
 function createNoteElement(text, colorClass) {
     const noteDiv = document.createElement('div');
@@ -48,7 +48,7 @@ toggleThemeButton.addEventListener('click', () => {
     localStorage.setItem('isDarkMode', isDarkMode);
     toggleThemeButton.textContent = isDarkMode ? 'Modo Claro' : 'Modo Oscuro';
 });
-
+// Esto es lo que deja que al dar doble click se pueda editar notas
 notesContainer.addEventListener('dblclick', (event) => {
     const target = event.target;
     if (target.classList.contains('note')) {
@@ -89,8 +89,6 @@ addButton.addEventListener('click', () => {
         const randomColor = colors[Math.floor(Math.random() * colors.length)];
         const newNote = createNoteElement(noteText, randomColor);
         notesContainer.appendChild(newNote);
-        const newNoteErr = createNoteElement(noteText, randomColor);
-        notesContainer.appendChild(newNoteErr);
         noteInput.value = '';
         addButton.disabled = true;
         saveNotes();
